@@ -1,17 +1,77 @@
-import React from 'react'
-import { Button } from 'react-bootstrap'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { Badge, Button, Card, CardBody, Col, Container, Row } from 'react-bootstrap';
+import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 const Home = () => {
+  const [getdata, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const items = getdata?.data?.data?.items;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://otruyenapi.com/v1/api/home");
+        setData(response);
+        setLoading(false);
+        console.log(response);
+
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
   return (
     <div>
-        <Button variant="primary">Primary</Button>
-      <Button variant="secondary">Secondary</Button>
-      <Button variant="success">Success</Button>
-      <Button variant="warning">Warning</Button>
-      <Button variant="danger">Danger</Button>
-      <Button variant="info">Info</Button>
-      <Button variant="light">Light</Button>
-      <Button variant="dark">Dark</Button>
-      <Button variant="link">Link</Button>
+      <Helmet>
+        <title>{getdata.data.data.seoOnPage.titleHead}</title>
+      </Helmet>
+      <Container>
+        <Row>
+          <Col>
+            <Card>
+              <Card.Body>
+                <Card.Title>{getdata.data.data.seoOnPage.titleHead}</Card.Title>
+                {getdata.data.data.seoOnPage.descriptionHead}</Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          {items && items.length > 0 ? (items.map((item, index) => (
+            <Col>
+              <Card>
+                <Card.Img variant="top" src={`https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`} />
+                <Card.Body>
+                  <Card.Title>{item.name}</Card.Title>
+                  <Card.Text>{item.updatedAt}</Card.Text>
+                  <Card.Text>
+                    {item.category && item.category.length > 0 ? (item.category.map((category, index) => (
+                      <Badge bg="info" key={index}>
+                        {category.name}
+                      </Badge>
+                    ))
+                    ) : 
+                      "Other"
+                    }
+                  </Card.Text>
+                  <Button variant="primary btn-sm" as={Link} to={`/comics/${item.slug}`}>More detail</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))
+          ) : (
+            <Col>
+              <CardBody>NO content avaiable</CardBody>
+            </Col>
+          )}
+
+
+        </Row>
+      </Container>
     </div>
   );
 };
