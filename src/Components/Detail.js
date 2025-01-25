@@ -80,7 +80,7 @@ const Detail = () => {
                   }
                 </Card.Text>
                 <Card.Title>{item.status || "Unknow"}</Card.Title>
-                <Button variant="primary btn-sm" as={Link} to={`/comics/${item.slug}`}>More detail</Button>
+               
               </Card.Body>
             </Card>
           </Col>
@@ -115,14 +115,13 @@ const Detail = () => {
                   <Modal.Title> Chaper{getdataChaper.data.item.chapter_name} - {getdataChaper.data.item.comic_name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-
                   {getdataChaper.data.item.chapter_image.length > 0 ?
-                    (getdataChaper.data.item.chapter_image.map((chapterImage, index) => 
-                      <Card.Img style={{ margin: 0}} variant="top" src={`${getdataChaper.data.domain_cdn}/${getdataChaper.data.item.chapter_path}/${chapterImage.image_file}`}>
-
+                    (getdataChaper.data.item.chapter_image.map((chapterImage, index) =>
+                      <Card.Img style={{ margin: 0 }} variant="top"
+                        src={`${getdataChaper.data.domain_cdn}/${getdataChaper.data.item.chapter_path}/${chapterImage.image_file}`}>
                       </Card.Img>
                     )) : "No image"
-                    }
+                  }
 
                 </Modal.Body>
                 <Modal.Footer>

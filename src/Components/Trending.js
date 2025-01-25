@@ -4,7 +4,7 @@ import { Badge, Button, Card, CardBody, Col, Container, Row } from 'react-bootst
 import { Helmet } from 'react-helmet';
 import { Link, useParams } from 'react-router-dom';
 import Menu from './Menu';
-const Genre = () => {
+const Trending = () => {
     const { slug } = useParams();
     const [getdata, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -13,7 +13,7 @@ const Genre = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://otruyenapi.com/v1/api/the-loai/${slug}`);
+                const response = await axios.get(`https://otruyenapi.com/v1/api/danh-sach/${slug}`);
                 setData(response);
                 setLoading(false);
                 console.log(response);
@@ -46,7 +46,7 @@ const Genre = () => {
                 <Row>
                     {items && items.length > 0 ? (items.map((item, index) => (
                         <Col>
-                            <Card as={Link} to={`/comics/${item.slug}`} style={{ textDecoration: 'none' }}>
+                            <Card as={Link} to={`/comics/${item.slug}`} style={{textDecoration: 'none'}}>
                                 <Card.Img variant="top" src={`https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`} />
                                 <Card.Body>
                                     <Card.Title>{item.name}</Card.Title>
@@ -70,10 +70,12 @@ const Genre = () => {
                             <CardBody>NO content avaiable</CardBody>
                         </Col>
                     )}
+
+
                 </Row>
             </Container>
         </div>
     );
 };
 
-export default Genre;
+export default Trending;

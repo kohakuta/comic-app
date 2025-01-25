@@ -45,7 +45,7 @@ const Home = () => {
         <Row>
           {items && items.length > 0 ? (items.map((item, index) => (
             <Col>
-              <Card>
+              <Card as={Link} to={`/comics/${item.slug}`} style={{textDecoration: 'none'}}>
                 <Card.Img variant="top" src={`https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`} />
                 <Card.Body>
                   <Card.Title>{item.name}</Card.Title>
@@ -60,7 +60,6 @@ const Home = () => {
                       "Other"
                     }
                   </Card.Text>
-                  <Button variant="primary btn-sm" as={Link} to={`/comics/${item.slug}`}>More detail</Button>
                 </Card.Body>
               </Card>
             </Col>
