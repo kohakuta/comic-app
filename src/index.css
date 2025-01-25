@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.chapter-click{
+  cursor: pointer;
+}
+.chapter-click:hover{
+  color: blue;
+}
+.dropdown-menu.show {
+  height: 500px;
+  overflow: auto;
+}
+.list-group-item {
+  height: 500px;
+  overflow: auto;
+}

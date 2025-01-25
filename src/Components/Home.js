@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Badge, Button, Card, CardBody, Col, Container, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
+import Menu from './Menu';
 const Home = () => {
   const [getdata, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ const Home = () => {
         <title>{getdata.data.data.seoOnPage.titleHead}</title>
       </Helmet>
       <Container>
+        <Menu></Menu>
         <Row>
           <Col>
             <Card>
