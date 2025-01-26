@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import React, { use, useEffect, useState } from 'react'
+import { Button, Col, Container, Form, Nav, Navbar, NavDropdown, Row } from 'react-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
 const Menu = () => {
+    const navigate = useNavigate();
     const [getdata, setData] = useState([]);
     const items = getdata?.data?.items;
     useEffect(() => {
@@ -16,6 +17,12 @@ const Menu = () => {
         };
         fetchData();
     }, []);
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const query = formData.get("keyword");
+        navigate(`/search?query=${query}`); //chuyển hướng đến trang search
+    };
     return (
         <div><Navbar expand="lg" className="bg-body-tertiary">
             <Container>
@@ -30,10 +37,25 @@ const Menu = () => {
                         <NavDropdown title="Thể loại" id="basic-nav-dropdown">
                             {items && items.length > 0 ? (
                                 items.map((nav, index) => (<NavDropdown.Item as={Link} to={`/genre/${nav.slug}`}>{nav.name}</NavDropdown.Item>))) : (
-                                    <NavDropdown.Item as={Link} to={"/"}>Unknow</NavDropdown.Item>
-                                )}
+                                <NavDropdown.Item as={Link} to={"/"}>Unknow</NavDropdown.Item>
+                            )}
                         </NavDropdown>
                     </Nav>
+                    <Form autoComplete="off" method="get" onSubmit={handleSearch}>
+                            <Row>
+                                <Col xs="auto">
+                                    <Form.Control
+                                        type="text"
+                                        name="keyword"
+                                        placeholder="Search"
+                                        className=" mr-sm-2"
+                                    />
+                                </Col>
+                                <Col xs="auto">
+                                    <Button type="submit">Submit</Button>
+                                </Col>
+                            </Row>
+                        </Form>
                 </Navbar.Collapse>
             </Container>
         </Navbar></div>

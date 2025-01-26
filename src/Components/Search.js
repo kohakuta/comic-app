@@ -2,9 +2,11 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Badge, Button, Card, CardBody, Col, Container, Pagination, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import Menu from './Menu';
-const Home = () => {
+const Search = () => {
+    const [searchParam] = useSearchParams(); //lấy giá trị từ url
+    const query  = searchParam.get("query"); //lấy giá trị từ query
   const [getdata, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,7 +16,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=${currentPage}`);
+        const response = await axios.get(`https://otruyenapi.com/v1/api/tim-kiem?keyword=${query}&page=${currentPage}`);
         setData(response.data);
         setLoading(false);
         console.log(response);
@@ -25,7 +27,7 @@ const Home = () => {
       }
     };
     fetchData();
-  }, [currentPage]);
+  }, [query,currentPage]);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   const totalPages = getdata?.data?.params?.pagination?.totalItems || 0;
@@ -42,6 +44,7 @@ const Home = () => {
       </Helmet>
       <Container>
         <Menu></Menu>
+        
         <Pagination className="pagination-container">
 
           <Pagination.Prev onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
@@ -97,7 +100,7 @@ const Home = () => {
           ))
           ) : (
             <Col>
-              <CardBody>NO content avaiable</CardBody>
+              <CardBody>No content avaiable</CardBody>
             </Col>
           )}
 
@@ -130,4 +133,4 @@ const Home = () => {
   );
 };
 
-export default Home
+export default Search;
