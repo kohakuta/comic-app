@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Badge, Button, Card, CardBody, Col, Container, Pagination, Row } from 'react-bootstrap';
+import { Badge, Button, Card, CardBody, CardGroup, Col, Container, Pagination, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import Menu from './Menu';
+import Footer from './Footer';
 const Search = () => {
-    const [searchParam] = useSearchParams(); //lấy giá trị từ url
-    const query  = searchParam.get("query"); //lấy giá trị từ query
+  const [searchParam] = useSearchParams(); //lấy giá trị từ url
+  const query = searchParam.get("query"); //lấy giá trị từ query
   const [getdata, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,7 +28,7 @@ const Search = () => {
       }
     };
     fetchData();
-  }, [query,currentPage]);
+  }, [query, currentPage]);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   const totalPages = getdata?.data?.params?.pagination?.totalItems || 0;
@@ -42,9 +43,10 @@ const Search = () => {
       <Helmet>
         <title>{getdata.data.seoOnPage.titleHead}</title>
       </Helmet>
-      <Container>
+      <Container className="mt-3">
+
         <Menu></Menu>
-        
+        <div><hr></hr></div>
         <Pagination className="pagination-container">
 
           <Pagination.Prev onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
@@ -67,7 +69,7 @@ const Search = () => {
           <Pagination.Next onClick={() => currentPage < totalPage && handlePageChange(currentPage + 1)} disabled={currentPage === totalPage} />
 
         </Pagination>
-        <Row>
+        <Row style={{paddingBottom: '20px'}}> 
           <Col>
             <Card>
               <Card.Body>
@@ -76,15 +78,19 @@ const Search = () => {
             </Card>
           </Col>
         </Row>
-        <Row>
+        <Row style={{ margin: '0 auto' }}>
           {items && items.length > 0 ? (items.map((item, index) => (
-            <Col>
-              <Card as={Link} to={`/comics/${item.slug}`} style={{ textDecoration: 'none' }}>
-                <Card.Img variant="top" src={`https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`} />
-                <Card.Body>
-                  <Card.Title>{item.name}</Card.Title>
-                  <Card.Text>{item.updatedAt}</Card.Text>
-                  <Card.Text>
+            <Col xs={6} sm={4} md={3} lg={2} key={index}>
+              <CardGroup style={{ height: '100%' }}>
+                <Card as={Link} to={`/comics/${item.slug}`}
+                  style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <Card.Img variant="top" src={`https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`}
+                    style={{ objectFit: 'cover', height: '255px', width: '100%' }} />
+                  <Card.Body style={{ flexGrow: 1 }}>
+                    <Card.Title className="card-title">{item.name}</Card.Title>
+                    <Card.Text>{item.updatedAt}</Card.Text>
+                  </Card.Body>
+                  <Card.Footer>
                     {item.category && item.category.length > 0 ? (item.category.map((category, index) => (
                       <Badge bg="info" key={index}>
                         {category.name}
@@ -93,9 +99,9 @@ const Search = () => {
                     ) :
                       "Other"
                     }
-                  </Card.Text>
-                </Card.Body>
-              </Card>
+                  </Card.Footer>
+                </Card>
+              </CardGroup>
             </Col>
           ))
           ) : (
@@ -106,6 +112,7 @@ const Search = () => {
 
 
         </Row>
+        <div><hr></hr></div>
         <Pagination className="pagination-container">
 
           <Pagination.Prev onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
@@ -129,6 +136,7 @@ const Search = () => {
 
         </Pagination>
       </Container>
+      <Footer></Footer>
     </div>
   );
 };

@@ -47,12 +47,12 @@ const Menu = () => {
                                     <Form.Control
                                         type="text"
                                         name="keyword"
-                                        placeholder="Search"
+                                        placeholder="Tìm kiếm truyện"
                                         className=" mr-sm-2"
                                     />
                                 </Col>
                                 <Col xs="auto">
-                                    <Button type="submit">Submit</Button>
+                                    <Button type="submit">Tìm kiếm</Button>
                                 </Col>
                             </Row>
                         </Form>

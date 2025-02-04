@@ -4,6 +4,8 @@ import { Badge, Button, Card, Col, Container, ListGroup, ListGroupItem, Modal, R
 import { Helmet } from 'react-helmet';
 import { Link, useParams } from 'react-router-dom'
 import Menu from './Menu';
+import Footer from './Footer';
+import Header from './Header';
 
 const Detail = () => {
   const { slug } = useParams();
@@ -15,6 +17,8 @@ const Detail = () => {
   const [isModalOpen, setisModalOpen] = useState(false);
   const item = getdata?.data?.data?.item;
   const [currentChapterIndex, setCurrentChapterIndex] = useState(null); // Lưu vị trí chapter hiện tại
+  const modalBodyRef = useRef(null); // Tham chiếu đến phần tử chứa nội dung chapter
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,7 +26,6 @@ const Detail = () => {
         setData(response);
         setLoading(false);
         console.log(response);
-        // Sau khi dữ liệu được tải, cuộn đến đầu danh sách chapter
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -30,8 +33,17 @@ const Detail = () => {
     };
     fetchData();
   }, [slug]);
+
+  useEffect(() => {
+    // Cuộn lên đầu trang mỗi khi currentChapterIndex thay đổi
+    if (modalBodyRef.current) {
+      modalBodyRef.current.scrollTo(0, 0);
+    }
+  }, [currentChapterIndex]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+
   const handleReadChapter = async (chapter_api, index) => {
     try {
       const response = await axios.get(`${chapter_api}`);
@@ -39,13 +51,13 @@ const Detail = () => {
       setCurrentChapterIndex(index); // Lưu vị trí chapter hiện tại
       setLoading(false);
       console.log(response);
-
     } catch (error) {
       setError(error.message);
       setLoading(false);
     }
     setisModalOpen(true);
   };
+
   const handleNextChapter = () => {
     if (currentChapterIndex !== null && currentChapterIndex < item.chapters[0].server_data.length - 1) {
       const nextChapter = item.chapters[0].server_data[currentChapterIndex + 1];
@@ -59,32 +71,28 @@ const Detail = () => {
       handleReadChapter(previousChapter.chapter_api_data, currentChapterIndex - 1);
     }
   };
+
   return (
     <div>
       <Helmet>
         <title>{getdata.data.data.seoOnPage.titleHead}</title>
       </Helmet>
-      <Container>
+      <Header></Header>
+      <Container className="mt-3">
         <Menu></Menu>
-        <Row>
+        <div><hr></hr></div>
+        <Row className='justify-content-md-center p-3'>
           <Col>
             <Card>
-              <Card.Body>
-                <Card.Title>{getdata.data.data.seoOnPage.titleHead}</Card.Title>
-                {getdata.data.data.seoOnPage.descriptionHead}</Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Card style={{ width: '30rem' }}>
-              <Card.Img variant="top" src={`https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`} />
+              <div className="text-center">
+                <Card.Img variant="center" src={`https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`}/>
+              </div>
               <Card.Body>
                 <Card.Title>{item.name || "No title"}</Card.Title>
-                <Card.Text>{item.updatedAt}</Card.Text>
+                <Card.Text>Cập nhật: {item.updatedAt}</Card.Text>
                 <Card.Title dangerouslySetInnerHTML={{ __html: item.content }}></Card.Title>
 
-                <Card.Text>
+                <Card.Text>Thể Loại:
                   {item.category && item.category.length > 0 ? (item.category.map((category, index) => (
                     <Badge bg="info" key={index}>
                       {category.name}
@@ -94,29 +102,29 @@ const Detail = () => {
                     "Other"
                   }
                 </Card.Text>
-                <Card.Title>{item.status || "Unknow"}</Card.Title>
+                <Card.Title>Tình trạng: {item.status || "Unknow"}</Card.Title>
 
               </Card.Body>
             </Card>
           </Col>
-          <Col>
-            <ListGroup className="scrollable-list">
-              <ListGroupItem>
-                {item.chapters &&
-                  item.chapters[0]?.server_data?.map((listchapter, index) => (
-
-                    <ListGroup.Item className="chapter-click"
-                      key={index}
-                      onClick={() => handleReadChapter(listchapter.chapter_api_data, index)}
-                      style={{ cursor: 'pointer', height: 'fit-content' }}
-                    >
-                      Chapter: {listchapter.chapter_name}
-                    </ListGroup.Item>
-                  ))}
-              </ListGroupItem>
-            </ListGroup>
-          </Col>
         </Row>
+        <Col>
+          <ListGroup className="scrollable-list">
+            <ListGroupItem>
+              {item.chapters &&
+                item.chapters[0]?.server_data?.map((listchapter, index) => (
+
+                  <ListGroup.Item className="chapter-click"
+                    key={index}
+                    onClick={() => handleReadChapter(listchapter.chapter_api_data, index)}
+                    style={{ cursor: 'pointer', height: 'fit-content' }}
+                  >
+                    Chapter: {listchapter.chapter_name}
+                  </ListGroup.Item>
+                ))}
+            </ListGroupItem>
+          </ListGroup>
+        </Col>
         <Row>
           {/* Modal for Chapter */}
           {isModalOpen && getdataChaper && (
@@ -126,18 +134,7 @@ const Detail = () => {
                   Chapter {getdataChaper.data.item.chapter_name} - {getdataChaper.data.item.comic_name}
                 </Modal.Title>
               </Modal.Header>
-              <Modal.Body>
-                <Button variant="secondary" onClick={handlePreviousChapter} disabled={currentChapterIndex === 0}>
-                  Previous Chapter
-                </Button>
-                <Button variant="primary" onClick={handleNextChapter} disabled={currentChapterIndex === item.chapters[0].server_data.length - 1}>
-                  Next Chapter
-                </Button>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-              </Modal.Body>
-              <Modal.Body>
+              <Modal.Body ref={modalBodyRef} style={{ overflowY: 'auto', maxHeight: '70vh' }}>
                 {getdataChaper.data.item.chapter_image.map((chapterImage, index) => (
                   <Card.Img
                     key={index}
@@ -146,23 +143,25 @@ const Detail = () => {
                   />
                 ))}
               </Modal.Body>
-              <Modal.Footer>
+              <Modal.Footer style={{ justifyContent: 'space-between' }}>
                 <Button variant="secondary" onClick={handlePreviousChapter} disabled={currentChapterIndex === 0}>
-                  Previous Chapter
+                 Trang trước
                 </Button>
                 <Button variant="primary" onClick={handleNextChapter} disabled={currentChapterIndex === item.chapters[0].server_data.length - 1}>
-                  Next Chapter
+                 Trang sau
                 </Button>
                 <Button variant="secondary" onClick={handleClose}>
-                  Close
+                 Đóng
                 </Button>
               </Modal.Footer>
             </Modal>
           )}
         </Row>
+        <div><hr></hr></div>
       </Container>
+      <Footer></Footer>
     </div>
   )
 }
 
-export default Detail
+export default Detail;

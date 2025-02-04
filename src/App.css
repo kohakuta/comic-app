@@ -6,7 +6,11 @@
   height: 40vmin;
   pointer-events: none;
 }
-
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -27,6 +31,12 @@
 .App-link {
   color: #61dafb;
 }
+.bg-body-tertiary {
+  border-radius: 5px;
+}
+.mt-3.container {
+  max-width: 1200px;
+}
 
 @keyframes App-logo-spin {
   from {
@@ -35,4 +45,70 @@
   to {
     transform: rotate(360deg);
   }
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-group {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 10px; /* Bo góc thẻ card cho đẹp */
+  overflow: hidden; /* Tránh nội dung tràn ra ngoài */
+}
+
+.card-body {
+  flex-grow: 1; /* Giúp phần nội dung giãn đều nhau */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-footer {
+  font-size: 14px;
+  padding: 8px 0;
+  font-weight: bold;
+}
+.col-lg-2.col-md-3.col-sm-4.col-6 {
+  padding-bottom: 10px;
+}
+/* Điều chỉnh trên mobile */
+@media (max-width: 768px) {
+  .card img {
+    height: 200px; /* Thu nhỏ ảnh trên mobile */
+  }
+  
+  .card-footer {
+    font-size: 12px; /* Giảm kích thước chữ footer */
+  }
+
+  .card-title {
+    font-size: 14px; /* Giảm kích thước tiêu đề */
+  }
+  .container {
+    max-width: 100%; /* Chiều rộng tối đa bằng 100% trên thiết bị nhỏ */
+    height: auto; /* Chiều cao tự động điều chỉnh */
+    padding: 10px; /* Giảm padding trên thiết bị nhỏ */
+}
+}
+.Header{
+  background-color: #282c34;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+}
+.Footer{
+  background-color: #282c34;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
 }

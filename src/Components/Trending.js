@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Badge, Button, Card, CardBody, Col, Container, Pagination, Row } from 'react-bootstrap';
+import { Badge, Button, Card, CardBody, CardGroup, Col, Container, Pagination, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
 import { Link, useParams } from 'react-router-dom';
 import Menu from './Menu';
+import Footer from './Footer';
+import Header from './Header';
 const Trending = () => {
     const { slug } = useParams();
     const [getdata, setData] = useState([]);
@@ -40,8 +42,10 @@ const Trending = () => {
             <Helmet>
                 <title>{getdata.data.seoOnPage.titleHead}</title>
             </Helmet>
-            <Container>
+            <Header></Header>
+            <Container className="mt-3">
                 <Menu></Menu>
+                <div><hr></hr></div>
                 <Pagination className="pagination-container">
 
                     <Pagination.Prev onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
@@ -63,44 +67,49 @@ const Trending = () => {
 
                 </Pagination>
                 <Row>
-                    <Col>
-                        <Card>
-                            <Card.Body>
-                                <Card.Title>{getdata.data.seoOnPage.titleHead}</Card.Title>
-                                {getdata.data.seoOnPage.descriptionHead}</Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-                <Row>
-                    {items && items.length > 0 ? (items.map((item, index) => (
-                        <Col>
-                            <Card as={Link} to={`/comics/${item.slug}`} style={{ textDecoration: 'none' }}>
-                                <Card.Img variant="top" src={`https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`} />
-                                <Card.Body>
-                                    <Card.Title>{item.name}</Card.Title>
-                                    <Card.Text>{item.updatedAt}</Card.Text>
-                                    <Card.Text>
-                                        {item.category && item.category.length > 0 ? (item.category.map((category, index) => (
-                                            <Badge bg="info" key={index}>
-                                                {category.name}
-                                            </Badge>
-                                        ))
-                                        ) :
-                                            "Other"
-                                        }
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))
-                    ) : (
-                        <Col>
-                            <CardBody>NO content avaiable</CardBody>
-                        </Col>
-                    )}
+                    <Row style={{ margin: '0 auto' }}>
+                        {items && items.length > 0 ? (
+                            items.map((item, index) => (
+                                <Col xs={6} sm={4} md={3} lg={2} key={index}>
+                                    <CardGroup style={{ height: '100%' }}>
+                                        <Card as={Link} to={`/comics/${item.slug}`}
+                                            style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
 
+                                            {/* Ảnh truyện */}
+                                            <Card.Img
+                                                variant="top"
+                                                src={`https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`}
+                                                style={{ objectFit: 'cover', height: '255px', width: '100%' }}
+                                            />
 
+                                            {/* Nội dung */}
+                                            <Card.Body style={{ flexGrow: 1 }}>
+                                                <Card.Title className="card-title">{item.name}</Card.Title>
+                                                <Card.Text>{item.updatedAt}</Card.Text>
+                                            </Card.Body>
+                                            <Card.Footer>
+                                                {item.category && item.category.length > 0 ? (item.category.map((category, index) => (
+                                                    <Badge bg="info" key={index}>
+                                                        {category.name}
+                                                    </Badge>
+                                                ))
+                                                ) :
+                                                    "Other"
+                                                }
+                                            </Card.Footer>
+                                        </Card>
+                                    </CardGroup>
+                                </Col>
+
+                            ))
+                        ) : (
+                            <Col>
+                                <CardBody>No content available</CardBody>
+                            </Col>
+                        )}
+                    </Row>
                 </Row>
+                <div><hr></hr></div>
                 <Pagination className="pagination-container">
 
                     <Pagination.Prev onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
@@ -122,6 +131,7 @@ const Trending = () => {
 
                 </Pagination>
             </Container>
+            <Footer></Footer>
         </div>
     );
 };
