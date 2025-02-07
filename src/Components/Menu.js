@@ -56,6 +56,10 @@ const Menu = () => {
                                 </Col>
                             </Row>
                         </Form>
+                    <Nav>
+                        <Nav.Link as={Link} to={"/login"}>Đăng nhập</Nav.Link>
+                        <Nav.Link as={Link} to={"/register"}>Đăng ký</Nav.Link>
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar></div>

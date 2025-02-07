@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import Menu from './Menu';
 import Footer from './Footer';
+import Header from './Header';
 const Search = () => {
   const [searchParam] = useSearchParams(); //lấy giá trị từ url
   const query = searchParam.get("query"); //lấy giá trị từ query
@@ -43,6 +44,7 @@ const Search = () => {
       <Helmet>
         <title>{getdata.data.seoOnPage.titleHead}</title>
       </Helmet>
+      <Header></Header>
       <Container className="mt-3">
 
         <Menu></Menu>

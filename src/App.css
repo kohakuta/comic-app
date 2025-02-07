@@ -112,3 +112,76 @@ body {
   bottom: 0;
   width: 100%;
 }
+/* Container của form đăng nhập */
+.login-container , .register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Hộp chứa form */
+.login-box, .register-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  min-width: 300px;
+  text-align: center;
+}
+
+/* Tiêu đề */
+.login-box h2 {
+  margin-bottom: 20px;
+}
+
+/* Input fields */
+.login-box input, .register-box input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Button */
+.login-box button, .register-box button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.login-box button:hover, .register-box button:hover {
+  background-color: #0056b3;
+}
+
+/* Link đăng ký */
+.register-link, .login-link {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.register-link a, .login-link a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.register-link a:hover, .login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive cho mobile */
+@media screen and (max-width: 768px) {
+  .login-box, .register-box {
+    width: 90%;
+    padding: 15px;
+  }
+}
